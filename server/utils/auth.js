@@ -6,7 +6,7 @@ const secret = 'mysecretsshhhhh';
 const expiration = '2h';
 
 module.exports = {
-  AuthenicationError: new GraphQLError('Could not authenticate user.', {
+  AuthenticationError: new GraphQLError('Could not authenticate user.', {
     extensions: {
       code: 'UNAUTHENTICATED',
     },
@@ -35,7 +35,7 @@ module.exports = {
     }
 
     // send to next endpoint
-    next();
+    return req;
   },
   signToken: function ({ username, email, _id }) {
     const payload = { username, email, _id };

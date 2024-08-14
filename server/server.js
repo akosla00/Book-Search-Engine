@@ -2,21 +2,23 @@ const express = require("express");
 const path = require("path");
 const db = require("./config/connection");
 const { ApolloServer } = require("@apollo/server");
-const { expressMiddleware } = requrie("@apollo/server/express4");
+const { expressMiddleware } = require("@apollo/server/express4");
 const { typeDefs, resolvers } = require("./schemas");
 const { authMiddleware } = require("./utils/auth");
+
+const PORT = process.env.PORT || 3001;
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 const startApolloServer = async () => {
   await server.start();
 
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
   app.use(
@@ -36,9 +38,9 @@ const startApolloServer = async () => {
   }
 
   db.once("open", () => {
-    app.listen(PORT, () =>
-      console.log(`🌍 Now listening on localhost:${PORT}`)
-    );
+    app.listen(PORT, () => {
+      console.log(`🌍 Now listening on localhost:${PORT}`);
+    });
   });
 };
 
